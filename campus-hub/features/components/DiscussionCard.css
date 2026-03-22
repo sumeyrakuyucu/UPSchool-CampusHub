@@ -1,0 +1,119 @@
+.discussion-card {
+  background-color: var(--surface-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.discussion-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.discussion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.discussion-user {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.user-info h4 {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.125rem;
+}
+
+.user-info span {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+.btn-icon {
+  color: var(--text-muted);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: background-color 0.2s ease;
+}
+
+.btn-icon:hover {
+  background-color: #f1f5f9;
+}
+
+.discussion-body {
+  margin-bottom: 1.5rem;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.discussion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tag {
+  color: var(--primary-color);
+  background-color: #ede9fe;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.825rem;
+  font-weight: 500;
+}
+
+.discussion-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.discussion-actions-left,
+.discussion-actions-right {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.action-btn:hover {
+  color: var(--primary-color);
+}
+
+@media (max-width: 640px) {
+  .discussion-actions-right .action-btn {
+    display: none;
+  }
+}

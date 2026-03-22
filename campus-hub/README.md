@@ -32,4 +32,4 @@ CampusHub, öğrencilerin ders notlarını paylaştığı ve birlikte çalışt�
     npm run dev
     ```
 4.  **Tarayıcıda Açın:**
-    `http://localhost:5173` (veya terminalde belirtilen port)
+    https://tangerine-platypus-4cc9e2.netlify.app/ 

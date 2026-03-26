@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import DiscussionCard from '../components/DiscussionCard';
 import UploadModal from '../components/UploadModal';
 import { PenTool } from 'lucide-react';
+import { useData } from '../context/DataContext';
 import './Discussions.css';
 
 const Discussions = () => {
   const [activeTab, setActiveTab] = useState('Trend Olanlar');
   const [isModalOpen, setModalOpen] = useState(false);
+  const { questions } = useData();
 
   const tabs = ['Trend Olanlar', 'En Yeniler', 'Çözülmemiş', 'Benim Alanım'];
 
@@ -40,6 +42,14 @@ const Discussions = () => {
         <div className="discussions-feed animate-fade-in" key={activeTab}>
           {activeTab === 'En Yeniler' ? (
             <>
+              {questions.map(q => (
+                <DiscussionCard 
+                  key={q.id}
+                  user={q.author} university="Senin Kampüsün" time="Az önce"
+                  question={q.title + " - " + q.content}
+                  tags={[q.type, 'yeni']} likes={0} comments={0}
+                />
+              ))}
               <DiscussionCard 
                 user="YeniKullanici" university="Gazi Üniv." time="5 dakika önce"
                 question="Programlamaya yeni başlıyorum, Python mu öğrenmeliyim C mi? Üniversitemizdeki hocalar C ile başlatıyor ama internet Python diyor."
@@ -53,6 +63,14 @@ const Discussions = () => {
             </>
           ) : activeTab === 'Çözülmemiş' ? (
             <>
+              {questions.map(q => (
+                <DiscussionCard 
+                  key={q.id}
+                  user={q.author} university="Senin Kampüsün" time="Az önce"
+                  question={q.title + " - " + q.content}
+                  tags={[q.type, 'soru']} likes={0} comments={0}
+                />
+              ))}
               <DiscussionCard 
                 user="EconStudent" university="Koç Üniv." time="5 saat önce"
                 question="Mikroekonomi dersinde arz-talep eğrilerinde esneklik konusundaki bu integralli çözümü bir türlü anlayamadım. Yardımcı olabilecek var mı?"
@@ -61,6 +79,14 @@ const Discussions = () => {
             </>
           ) : (
             <>
+              {questions.map(q => (
+                <DiscussionCard 
+                  key={q.id}
+                  user={q.author} university="Senin Kampüsün" time="Az önce"
+                  question={q.title + " - " + q.content}
+                  tags={[q.type]} likes={0} comments={0}
+                />
+              ))}
               <DiscussionCard 
                 user="Yazilimci123" university="Boğaziçi Üniv." time="1 saat önce"
                 question="Algoritma dersinde Dinamik Programlama konusunu bir türlü oturtamadım. Önerebileceğiniz bir kaynak veya çalışma taktiği var mı?"

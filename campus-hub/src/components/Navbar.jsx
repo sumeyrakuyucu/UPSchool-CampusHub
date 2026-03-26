@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, User, Menu, Moon, Sun, Award } from 'lucide-react';
+import { BookOpen, User, Menu, Moon, Sun, Award, LogOut } from 'lucide-react';
 import AuthModal from './AuthModal';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,6 +10,7 @@ const Navbar = () => {
   const [isAuthOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const { user, logout } = useAuth();
   
   // Örnek Kampüs Puanı
   const [points, setPoints] = useState(1250); 
@@ -63,14 +65,29 @@ const Navbar = () => {
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
 
-            <button className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => openAuth('login')}>
-              <User size={18} /> Giriş Yap
-            </button>
-            <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => openAuth('register')}>
-              Kayıt Ol
-            </button>
-            <button className="mobile-menu-btn" onClick={() => openAuth('login')}>
-              <Menu size={24} />
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{user.name}</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{user.email}</span>
+                </div>
+                <button className="btn btn-outline btn-sm" style={{ padding: '0.4rem', minWidth: 'auto' }} onClick={logout} title="Çıkış Yap">
+                  <LogOut size={18} />
+                </button>
+              </div>
+            ) : (
+              <>
+                <button className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => openAuth('login')}>
+                  <User size={18} /> Giriş Yap
+                </button>
+                <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => openAuth('register')}>
+                  Kayıt Ol
+                </button>
+              </>
+            )}
+            
+            <button className="mobile-menu-btn" onClick={() => (user ? logout() : openAuth('login'))}>
+               {user ? <LogOut size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>

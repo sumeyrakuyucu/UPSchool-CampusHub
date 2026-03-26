@@ -8,26 +8,32 @@ import Resources from './pages/Resources';
 import Discussions from './pages/Discussions';
 import StudyRooms from './pages/StudyRooms';
 import AiAssistant from './components/AiAssistant';
+import { AuthProvider } from './context/AuthContext';
+import { DataProvider } from './context/DataContext';
 import './App.css';
 
 function App() {
   return (
-    <Router>
-      <div className="app-wrapper">
-        <Toaster position="bottom-right" reverseOrder={false} />
-        <Navbar />
-        <AiAssistant />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/discussions" element={<Discussions />} />
-            <Route path="/study-rooms" element={<StudyRooms />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <AuthProvider>
+      <DataProvider>
+        <Router>
+          <div className="app-wrapper">
+            <Toaster position="bottom-right" reverseOrder={false} />
+            <Navbar />
+            <AiAssistant />
+            <main className="main-content">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/discussions" element={<Discussions />} />
+                <Route path="/study-rooms" element={<StudyRooms />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </DataProvider>
+    </AuthProvider>
   );
 }
 

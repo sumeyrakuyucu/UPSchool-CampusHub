@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import ResourceCard from '../components/ResourceCard';
 import { Filter, Search } from 'lucide-react';
+import { useData } from '../context/DataContext';
 import toast from 'react-hot-toast';
 import './Resources.css';
 
 const Resources = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { resources } = useData();
 
   const handleFilterChange = (e) => {
     toast.success(`${e.target.labels?.[0]?.innerText || 'Filtre'} başarıyla uygulandı!`, {
@@ -78,6 +80,13 @@ const Resources = () => {
           </div>
           
           <div className="resources-list">
+            {resources.map(r => (
+              <ResourceCard 
+                key={r.id}
+                title={r.title} category={r.type === 'not' ? 'Ders Notu' : 'Çıkmış Soru'}
+                university="Senin Kampüsün" downloads="0" date="Az önce" author={r.author} 
+              />
+            ))}
             <ResourceCard 
               title="Calculus 1 - Vize Hazırlık (Konu Özeti)" category="Ders Notu"
               university="İTÜ" downloads="1.2k" date="2 gün önce" author="matematikci" />

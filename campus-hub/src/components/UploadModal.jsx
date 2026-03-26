@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { X, UploadCloud, CheckCircle, File, Loader } from 'lucide-react';
+import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 import './UploadModal.css';
 
 const UploadModal = ({ isOpen, onClose }) => {
@@ -9,6 +12,8 @@ const UploadModal = ({ isOpen, onClose }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [formType, setFormType] = useState('soru'); // soru, not, cikmis
   const fileInputRef = useRef(null);
+  const { addQuestion, addResource } = useData();
+  const { user } = useAuth();
 
   if (!isOpen) return null;
 
@@ -46,11 +51,40 @@ const UploadModal = ({ isOpen, onClose }) => {
     setFile(null);
   };
 
-  const handleSubmit = () => {
-    // Fake upload process
+  const handleSubmit = (e) => {
+    if (!user) {
+      toast.error('Paylaşım yapabilmek için önce giriş yapmalısın!');
+      return;
+    }
+
+    const form = e.target.closest('.modal-content');
+    const titleInput = form.querySelector('input[name="title"]');
+    const detailTextarea = form.querySelector('textarea[name="detail"]');
+
+    if (!titleInput.value || !detailTextarea.value) {
+      toast.error('Lütfen tüm alanları doldurur musun?');
+      return;
+    }
+
+    // Fake upload process start
     setIsUploading(true);
     
     setTimeout(() => {
+      const newItem = {
+        title: titleInput.value,
+        content: detailTextarea.value,
+        author: user.name,
+        authorEmail: user.email,
+        fileName: file ? file.name : null,
+        type: formType
+      };
+
+      if (formType === 'soru') {
+        addQuestion(newItem);
+      } else {
+        addResource(newItem);
+      }
+
       setIsUploading(false);
       setIsSuccess(true);
       
@@ -98,12 +132,12 @@ const UploadModal = ({ isOpen, onClose }) => {
              <>
                <div className="form-group">
                  <label>Başlık</label>
-                 <input type="text" placeholder={formType === 'soru' ? "Örn: Calculus vizeleri çok zorluyor, nasıl çalışmalıyım?" : "Örn: Fizik 101 İkinci Vize Çıkmış Sorular"} className="form-input" />
+                  <input type="text" name="title" placeholder={formType === 'soru' ? "Örn: Calculus vizeleri çok zorluyor, nasıl çalışmalıyım?" : "Örn: Fizik 101 İkinci Vize Çıkmış Sorular"} className="form-input" />
                </div>
                
                <div className="form-group">
                  <label>Detaylar / Sorunuz</label>
-                 <textarea placeholder="Sorununuzu veya paylaşmak istediğiniz detayı buraya yazın..." className="form-textarea" rows="4"></textarea>
+                  <textarea name="detail" placeholder="Sorununuzu veya paylaşmak istediğiniz detayı buraya yazın..." className="form-textarea" rows="4"></textarea>
                </div>
                
                <div 

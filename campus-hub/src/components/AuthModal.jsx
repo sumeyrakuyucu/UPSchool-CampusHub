@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const AuthModal = ({ isOpen, onClose, initialMode }) => {
   const [mode, setMode] = useState(initialMode || 'login'); // 'login' veya 'register'
   
+  const { login, register } = useAuth();
+
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success(mode === 'login' ? 'Başarıyla giriş yapıldı!' : 'Kayıt işlemi başarılı! Hoş geldin.');
-    onClose();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    if (mode === 'register') {
+      const result = register(data);
+      if (result.success) {
+        toast.success('Kayıt işlemi başarılı! Hoş geldin.');
+        onClose();
+      } else {
+        toast.error(result.message);
+      }
+    } else {
+      const result = login(data.email, data.password);
+      if (result.success) {
+        toast.success('Başarıyla giriş yapıldı!');
+        onClose();
+      } else {
+        toast.error(result.message);
+      }
+    }
   };
 
   return (
@@ -28,18 +48,18 @@ const AuthModal = ({ isOpen, onClose, initialMode }) => {
             {mode === 'register' && (
               <div className="form-group">
                 <label>Ad Soyad</label>
-                <input type="text" required placeholder="Örn: Ahmet Yılmaz" className="form-input" />
+                <input type="text" name="name" required placeholder="Örn: Ahmet Yılmaz" className="form-input" />
               </div>
             )}
             
             <div className="form-group">
               <label>Üniversite E-Postası</label>
-              <input type="email" required placeholder="Örn: ahmet@ogrenci.edu.tr" className="form-input" />
+              <input type="email" name="email" required placeholder="Örn: ahmet@ogrenci.edu.tr" className="form-input" />
             </div>
             
             <div className="form-group">
               <label>Şifre</label>
-              <input type="password" required placeholder="••••••••" className="form-input" />
+              <input type="password" name="password" required placeholder="••••••••" className="form-input" />
             </div>
             
             <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>

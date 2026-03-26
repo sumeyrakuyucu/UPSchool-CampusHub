@@ -8,7 +8,7 @@ CampusHub, öğrencilerin ders notlarını paylaştığı ve birlikte çalışt�
 
 ## Canlı Demo
 **Yayın Linki:** [CampusHub Canlı Demo](https://thecampushub.netlify.app/)  
-**Demo Video:** [Projenin Kullanım Videosu (Loom)](https://www.loom.com/share/f4fc11cd5a1341de944b0108b4823260)  
+**Demo Video:** [Projenin Kullanım Videosu (Loom)](https://www.loom.com/share/d079d47d1fed4ef8bdb87d673e7bfbee)  
 
 
 ## Kullanılan Teknolojiler

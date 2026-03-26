@@ -12,7 +12,7 @@
 CampusHub, öğrencilerin ders notlarını paylaştığı ve birlikte çalıştığı modern bir ekosistemdir. Uygulama içerisinde yer alan AI Asistanı **Hubie**, kullanıcılara anlık yanıtlar vererek, doğru kaynaklara yönlendirerek ve akademik kavramları açıklayarak rehberlik rolü üstlenir.
 
 ## Canlı Demo
-**Yayın Linki:** [CampusHub Canlı Demo](https://thecampushub.netlify.app/)  
+**Yayın Linki:** [CampusHub Canlı Demo](https://thecapmus-hub.netlify.app/)  
 **Demo Video:** [Projenin Kullanım Videosu (Loom)](https://www.loom.com/share/d079d47d1fed4ef8bdb87d673e7bfbee)  
 
 

@@ -7,9 +7,9 @@
 CampusHub, öğrencilerin ders notlarını paylaştığı ve birlikte çalıştığı modern bir ekosistemdir. Uygulama içerisinde yer alan AI Asistanı **Hubie**, kullanıcılara anlık yanıtlar vererek, doğru kaynaklara yönlendirerek ve akademik kavramları açıklayarak rehberlik rolü üstlenir.
 
 ## Canlı Demo
-**Yayın Linki:** [CampusHub Canlı Demo](https://campushub-demo.vercel.app)  
-**Demo Video:** [Projenin Kullanım Videosu (Loom/YouTube)](https://youtube.com)  
-*(Not: Bu bir prototiptir, linkler temsilidir.)*
+**Yayın Linki:** [CampusHub Canlı Demo](https://thecampushub.netlify.app/)  
+**Demo Video:** [Projenin Kullanım Videosu (Loom)](https://www.loom.com/share/f4fc11cd5a1341de944b0108b4823260)  
+
 
 ## Kullanılan Teknolojiler
 - **Frontend:** React (Vite)
@@ -32,4 +32,4 @@ CampusHub, öğrencilerin ders notlarını paylaştığı ve birlikte çalışt�
     npm run dev
     ```
 4.  **Tarayıcıda Açın:**
-    `http://localhost:5173` (veya terminalde belirtilen port)
+    https://thecampushub.netlify.app/ 

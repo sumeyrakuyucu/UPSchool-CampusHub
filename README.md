@@ -1,5 +1,10 @@
 # 🚀 CampusHub
 
+## Proje Dokümantasyonu
+- 💡 [Proje Fikri (idea.md)](./idea.md)
+- 🏗️ [Teknoloji Yığını (tech-stack.md)](./tech-stack.md)
+- 🌊 [Kullanıcı Akışı (user-flow.md)](./user-flow.md)
+
 ## Problem
 Üniversite öğrencilerinin derslerde yetersiz kaldığı anlarda veya sınav dönemlerinde kaliteli, düzenli ve güvenilir akademik kaynaklara ulaşma zorluğu yaşaması. Bilgilerin farklı platformlarda dağınık olması ve yalnız çalışırken odaklanma sorunu çekilmesi.
 

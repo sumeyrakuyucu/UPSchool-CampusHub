@@ -10,16 +10,16 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
-      // Migration: Give starter points to existing users who have 0
-      if (parsedUser.kp === undefined || parsedUser.kp === 0) {
-        parsedUser.kp = 250;
+      // Migration: Give starter points to existing users who have 0 (eskisi gibi 1250)
+      if (parsedUser.kp === undefined || parsedUser.kp === 0 || parsedUser.kp === 250) {
+        parsedUser.kp = 1250;
         localStorage.setItem('currentUser', JSON.stringify(parsedUser));
         
         // Update users list as well
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         const idx = users.findIndex(u => u.id === parsedUser.id);
         if (idx !== -1) {
-          users[idx].kp = 250;
+          users[idx].kp = 1250;
           localStorage.setItem('users', JSON.stringify(users));
         }
       }
@@ -34,14 +34,14 @@ export const AuthProvider = ({ children }) => {
       
       // Check if email already exists
       if (users.find(u => u.email === userData.email)) {
-        throw new Error('Bu e-posta adresi zaten kayıtlı.');
+        throw new Error('Bu e-posta adresi zaten kullanımda.');
       }
 
       const newUser = {
         ...userData,
         id: Date.now().toString(),
         createdAt: new Date().toISOString(),
-        kp: 250 // Başlangıç hediyesi :)
+        kp: 1250 // Başlangıç hediyesi (Eskisi gibi)
       };
 
       users.push(newUser);
@@ -62,8 +62,10 @@ export const AuthProvider = ({ children }) => {
       const foundUser = users.find(u => u.email === email && u.password === password);
 
       if (foundUser) {
-        // Migration: Add KP if it doesn't exist for old users
-        if (foundUser.kp === undefined) foundUser.kp = 250;
+        // Migration: Add KP if it doesn't exist for old users (Eskisi gibi 1250)
+        if (foundUser.kp === undefined || foundUser.kp === 0 || foundUser.kp === 250) {
+          foundUser.kp = 1250;
+        }
         
         setUser(foundUser);
         localStorage.setItem('currentUser', JSON.stringify(foundUser));

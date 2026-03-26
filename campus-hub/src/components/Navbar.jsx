@@ -12,8 +12,8 @@ const Navbar = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const { user, logout } = useAuth();
   
-  // Kampüs Puanı (user varsa ondan al, yoksa 0)
-  const points = user?.kp || 0; 
+  // Kampüs Puanı (user varsa ondan al, yoksa misafir için 1250 göster)
+  const points = user ? (user.kp ?? 1250) : 1250; 
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

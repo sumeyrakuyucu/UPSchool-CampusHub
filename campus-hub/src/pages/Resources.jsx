@@ -80,8 +80,24 @@ const Resources = () => {
           </div>
           
           <div className="resources-list">
-            {resources.length > 0 ? (
-              resources.map(r => (
+            {(() => {
+              let filtered = resources.filter(r => 
+                r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                r.author.toLowerCase().includes(searchQuery.toLowerCase())
+              );
+              
+              // Note: Sorting by date (newest first)
+              filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="empty-state" style={{ padding: '3rem', textAlign: 'center', opacity: 0.6, width: '100%' }}>
+                    Aradığınız kriterlere uygun kaynak bulunamadı.
+                  </div>
+                );
+              }
+
+              return filtered.map(r => (
                 <ResourceCard 
                   key={r.id}
                   title={r.title} 
@@ -92,12 +108,8 @@ const Resources = () => {
                   author={r.author} 
                   content={r.content}
                 />
-              ))
-            ) : (
-              <div className="empty-state" style={{ padding: '2rem', textAlign: 'center', opacity: 0.6 }}>
-                Henüz hiç kaynak paylaşılmamış. İlk paylaşan sen ol!
-              </div>
-            )}
+              ));
+            })()}
           </div>
         </main>
       </div>

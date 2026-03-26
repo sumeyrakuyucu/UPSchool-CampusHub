@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';

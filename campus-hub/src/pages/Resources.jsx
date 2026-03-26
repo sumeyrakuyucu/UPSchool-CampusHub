@@ -80,25 +80,24 @@ const Resources = () => {
           </div>
           
           <div className="resources-list">
-            {resources.map(r => (
-              <ResourceCard 
-                key={r.id}
-                title={r.title} category={r.type === 'not' ? 'Ders Notu' : 'Çıkmış Soru'}
-                university="Senin Kampüsün" downloads="0" date="Az önce" author={r.author} 
-              />
-            ))}
-            <ResourceCard 
-              title="Calculus 1 - Vize Hazırlık (Konu Özeti)" category="Ders Notu"
-              university="İTÜ" downloads="1.2k" date="2 gün önce" author="matematikci" />
-            <ResourceCard 
-              title="Fizik 101 - Son 5 Yıl Çıkmış Sorular" category="Çıkmış Soru"
-              university="ODTÜ" downloads="850" date="1 hafta önce" author="fizik_ustasi" />
-            <ResourceCard 
-              title="Lineer Cebir - Tam Dönem Ders Notları" category="Ders Notu"
-              university="Boğaziçi Üniv." downloads="2.1k" date="3 hafta önce" author="ali_k" />
-            <ResourceCard 
-              title="Kimya Laboratuvarı Rapor Örnekleri" category="Ödev/Proje"
-              university="Ege Üniv." downloads="420" date="1 ay önce" author="kimyager" />
+            {resources.length > 0 ? (
+              resources.map(r => (
+                <ResourceCard 
+                  key={r.id}
+                  title={r.title} 
+                  category={r.type === 'not' ? 'Ders Notu' : r.type === 'cikmis' ? 'Çıkmış Soru' : 'Özet'}
+                  university={r.university || 'Bilinmeyen Kampüs'} 
+                  downloads={r.downloads || '0'} 
+                  date={new Date(r.date).toLocaleDateString('tr-TR')} 
+                  author={r.author} 
+                  content={r.content}
+                />
+              ))
+            ) : (
+              <div className="empty-state" style={{ padding: '2rem', textAlign: 'center', opacity: 0.6 }}>
+                Henüz hiç kaynak paylaşılmamış. İlk paylaşan sen ol!
+              </div>
+            )}
           </div>
         </main>
       </div>

@@ -3,7 +3,7 @@ import { FileText, Download, Star, Clock, Edit3, X, PenTool, Type, Trash2 } from
 import toast from 'react-hot-toast';
 import './ResourceCard.css';
 
-const AnnotationModal = ({ isOpen, onClose, title }) => {
+const AnnotationModal = ({ isOpen, onClose, title, content }) => {
   if (!isOpen) return null;
 
   return (
@@ -12,7 +12,7 @@ const AnnotationModal = ({ isOpen, onClose, title }) => {
         <div className="modal-header" style={{ borderBottom: '1px solid var(--border-color)', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h3 style={{ fontSize: '1.2rem', margin: 0 }}>Defter Modu: {title}</h3>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Sayfa 1 / 14</span>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Sayfa 1 / 1</span>
           </div>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <button className="btn btn-outline btn-sm" style={{ padding: '0.4rem', border: '1px solid var(--primary-color)', color: 'var(--primary-color)' }}>
@@ -33,22 +33,18 @@ const AnnotationModal = ({ isOpen, onClose, title }) => {
         </div>
         
         <div className="modal-body" style={{ flex: 1, backgroundColor: '#e2e8f0', padding: '2rem', overflowY: 'auto', display: 'flex', justifyContent: 'center' }}>
-          {/* Fake PDF Page */}
+          {/* PDF Page Placeholder */}
           <div style={{ width: '100%', maxWidth: '600px', height: '800px', backgroundColor: 'white', padding: '3rem', boxShadow: 'var(--shadow-md)', borderRadius: '4px', position: 'relative' }}>
             <h2 style={{ textAlign: 'center', marginBottom: '2rem', borderBottom: '2px solid black', paddingBottom: '1rem' }}>{title}</h2>
-            <p style={{ lineHeight: 1.8, fontSize: '1.1rem', color: '#333' }}>
-              Ders notları başlangıcı... <br/><br/>
-              Limit, matematikte bir fonksiyonun bir noktaya yaklaşırken aldığı değere yakınsamasıdır.
-              Türev ise bu değişimin anlık hızıdır. <br/><br/>
-              <span style={{ backgroundColor: 'rgba(250, 204, 21, 0.4)', padding: '0 0.2rem' }}>
-                Önemli Formül: f'(x) = lim h-&gt;0 [f(x+h) - f(x)] / h
-              </span>
-            </p>
-            {/* Fake Hand-drawn annotation */}
-            <div style={{ position: 'absolute', top: '180px', right: '50px', transform: 'rotate(-10deg)', color: '#ef4444', fontFamily: 'cursive', fontSize: '1.2rem', fontWeight: 'bold' }}>
-              Burası vizede kesin <br/>çıkacak hoca söyledi!
+            <div style={{ lineHeight: 1.8, fontSize: '1.1rem', color: '#333', whiteSpace: 'pre-wrap' }}>
+              {content || "Bu kaynak için içerik detayı bulunamadı. Lütfen orijinal dosyayı indirin veya önizleme için bekleyin."}
             </div>
-            <div style={{ position: 'absolute', top: '220px', right: '180px', width: '30px', height: '30px', border: '3px solid #ef4444', borderRadius: '50%' }}></div>
+            
+            {title.toLowerCase().includes('calculus') && (
+              <div style={{ position: 'absolute', top: '180px', right: '50px', transform: 'rotate(-10deg)', color: '#ef4444', fontFamily: 'cursive', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                Burası vizede kesin <br/>çıkacak hoca söyledi!
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -56,7 +52,7 @@ const AnnotationModal = ({ isOpen, onClose, title }) => {
   );
 };
 
-const ResourceCard = ({ title, category, university, downloads: initialDownloads, date, author }) => {
+const ResourceCard = ({ title, category, university, downloads: initialDownloads, date, author, content }) => {
   const [downloads, setDownloads] = useState(initialDownloads);
   const [isSaved, setIsSaved] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -130,7 +126,7 @@ const ResourceCard = ({ title, category, university, downloads: initialDownloads
         </div>
       </div>
 
-      <AnnotationModal isOpen={isAnnotationOpen} onClose={() => setAnnotationOpen(false)} title={title} />
+      <AnnotationModal isOpen={isAnnotationOpen} onClose={() => setAnnotationOpen(false)} title={title} content={content} />
     </div>
   );
 };

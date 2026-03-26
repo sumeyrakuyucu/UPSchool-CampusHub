@@ -59,9 +59,10 @@ const UploadModal = ({ isOpen, onClose }) => {
 
     const form = e.target.closest('.modal-content');
     const titleInput = form.querySelector('input[name="title"]');
+    const universityInput = form.querySelector('input[name="university"]');
     const detailTextarea = form.querySelector('textarea[name="detail"]');
 
-    if (!titleInput.value || !detailTextarea.value) {
+    if (!titleInput.value || !detailTextarea.value || !universityInput.value) {
       toast.error('Lütfen tüm alanları doldurur musun?');
       return;
     }
@@ -73,6 +74,7 @@ const UploadModal = ({ isOpen, onClose }) => {
       const newItem = {
         title: titleInput.value,
         content: detailTextarea.value,
+        university: universityInput.value,
         author: user.name,
         authorEmail: user.email,
         fileName: file ? file.name : null,
@@ -133,6 +135,11 @@ const UploadModal = ({ isOpen, onClose }) => {
                <div className="form-group">
                  <label>Başlık</label>
                   <input type="text" name="title" placeholder={formType === 'soru' ? "Örn: Calculus vizeleri çok zorluyor, nasıl çalışmalıyım?" : "Örn: Fizik 101 İkinci Vize Çıkmış Sorular"} className="form-input" />
+               </div>
+
+               <div className="form-group">
+                 <label>Üniversite</label>
+                  <input type="text" name="university" placeholder="Örn: İTÜ, ODTÜ, Boğaziçi..." className="form-input" defaultValue={user?.university || ''} />
                </div>
                
                <div className="form-group">

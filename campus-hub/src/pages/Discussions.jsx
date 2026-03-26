@@ -40,65 +40,33 @@ const Discussions = () => {
         </div>
         
         <div className="discussions-feed animate-fade-in" key={activeTab}>
-          {activeTab === 'En Yeniler' ? (
-            <>
-              {questions.map(q => (
-                <DiscussionCard 
-                  key={q.id}
-                  user={q.author} university="Senin Kampüsün" time="Az önce"
-                  question={q.title + " - " + q.content}
-                  tags={[q.type, 'yeni']} likes={0} comments={0}
-                />
-              ))}
+          {(() => {
+            let filtered = [...questions];
+            if (activeTab === 'En Yeniler') {
+              filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (activeTab === 'Trend Olanlar') {
+              filtered.sort((a, b) => b.likes - a.likes);
+            } else if (activeTab === 'Çözülmemiş') {
+              filtered = filtered.filter(q => q.comments === 0);
+            }
+
+            if (filtered.length === 0) {
+              return <div style={{ textAlign: 'center', padding: '3rem', opacity: 0.5 }}>Bu kategoride henüz soru yok.</div>;
+            }
+
+            return filtered.map(q => (
               <DiscussionCard 
-                user="YeniKullanici" university="Gazi Üniv." time="5 dakika önce"
-                question="Programlamaya yeni başlıyorum, Python mu öğrenmeliyim C mi? Üniversitemizdeki hocalar C ile başlatıyor ama internet Python diyor."
-                tags={['programlama', 'tavsiye', 'yeni']} likes={3} comments={0}
+                key={q.id}
+                user={q.author} 
+                university={q.university || 'Bilinmeyen Kampüs'} 
+                time={new Date(q.date).toLocaleDateString('tr-TR')}
+                question={q.title + " - " + q.content}
+                tags={[q.type, q.comments === 0 ? 'yeni' : 'çözülüyor']} 
+                likes={q.likes || 0} 
+                comments={q.comments || 0}
               />
-              <DiscussionCard 
-                user="MuhendisBey" university="Yıldız Teknik Üniv." time="Dün"
-                question="Bitirme projesi için React mı yoksa Vue mü tercih etmeliyim? Projenin kapsamı oldukça geniş ve ölçeklenebilir olması gerekiyor."
-                tags={['yazılım', 'frontend', 'proje']} likes={56} comments={34}
-              />
-            </>
-          ) : activeTab === 'Çözülmemiş' ? (
-            <>
-              {questions.map(q => (
-                <DiscussionCard 
-                  key={q.id}
-                  user={q.author} university="Senin Kampüsün" time="Az önce"
-                  question={q.title + " - " + q.content}
-                  tags={[q.type, 'soru']} likes={0} comments={0}
-                />
-              ))}
-              <DiscussionCard 
-                user="EconStudent" university="Koç Üniv." time="5 saat önce"
-                question="Mikroekonomi dersinde arz-talep eğrilerinde esneklik konusundaki bu integralli çözümü bir türlü anlayamadım. Yardımcı olabilecek var mı?"
-                tags={['ekonomi', 'mikroekonomi', 'soru']} likes={8} comments={3}
-              />
-            </>
-          ) : (
-            <>
-              {questions.map(q => (
-                <DiscussionCard 
-                  key={q.id}
-                  user={q.author} university="Senin Kampüsün" time="Az önce"
-                  question={q.title + " - " + q.content}
-                  tags={[q.type]} likes={0} comments={0}
-                />
-              ))}
-              <DiscussionCard 
-                user="Yazilimci123" university="Boğaziçi Üniv." time="1 saat önce"
-                question="Algoritma dersinde Dinamik Programlama konusunu bir türlü oturtamadım. Önerebileceğiniz bir kaynak veya çalışma taktiği var mı?"
-                tags={['algoritma', 'cs101', 'tavsiye']} likes={24} comments={5}
-              />
-              <DiscussionCard 
-                user="CananT" university="Hacettepe Üniv." time="3 saat önce"
-                question="Tıp 1. Sınıf anatomi laboratuvar sınavı için pratik ipuçlarınız nelerdir? Kemik ezberlerken hangi yöntemleri kullandınız?"
-                tags={['tıp', 'anatomi', 'tavsiye']} likes={42} comments={12}
-              />
-            </>
-          )}
+            ));
+          })()}
         </div>
       </div>
 

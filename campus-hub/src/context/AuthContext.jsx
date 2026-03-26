@@ -9,7 +9,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const parsedUser = JSON.parse(savedUser);
+      // Migration: Give starter points to existing users who have 0
+      if (parsedUser.kp === undefined || parsedUser.kp === 0) {
+        parsedUser.kp = 250;
+        localStorage.setItem('currentUser', JSON.stringify(parsedUser));
+        
+        // Update users list as well
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const idx = users.findIndex(u => u.id === parsedUser.id);
+        if (idx !== -1) {
+          users[idx].kp = 250;
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+      }
+      setUser(parsedUser);
     }
     setLoading(false);
   }, []);
@@ -27,7 +41,7 @@ export const AuthProvider = ({ children }) => {
         ...userData,
         id: Date.now().toString(),
         createdAt: new Date().toISOString(),
-        kp: 0 // Başlangıç puanı
+        kp: 250 // Başlangıç hediyesi :)
       };
 
       users.push(newUser);
@@ -49,7 +63,7 @@ export const AuthProvider = ({ children }) => {
 
       if (foundUser) {
         // Migration: Add KP if it doesn't exist for old users
-        if (foundUser.kp === undefined) foundUser.kp = 0;
+        if (foundUser.kp === undefined) foundUser.kp = 250;
         
         setUser(foundUser);
         localStorage.setItem('currentUser', JSON.stringify(foundUser));

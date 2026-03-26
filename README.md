@@ -37,4 +37,4 @@ CampusHub, öğrencilerin ders notlarını paylaştığı ve birlikte çalışt�
     npm run dev
     ```
 4.  **Tarayıcıda Açın:**
-    https://thecampushub.netlify.app/ 
+    https://thecapmus-hub.netlify.app/

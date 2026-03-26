@@ -13,7 +13,7 @@ const UploadModal = ({ isOpen, onClose }) => {
   const [formType, setFormType] = useState('soru'); // soru, not, cikmis
   const fileInputRef = useRef(null);
   const { addQuestion, addResource } = useData();
-  const { user } = useAuth();
+  const { user, updateKp } = useAuth();
 
   if (!isOpen) return null;
 
@@ -83,8 +83,10 @@ const UploadModal = ({ isOpen, onClose }) => {
 
       if (formType === 'soru') {
         addQuestion(newItem);
+        updateKp(20);
       } else {
         addResource(newItem);
+        updateKp(50);
       }
 
       setIsUploading(false);

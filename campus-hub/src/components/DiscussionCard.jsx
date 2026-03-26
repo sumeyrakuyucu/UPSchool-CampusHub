@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MessageCircle, Heart, Share2, MoreHorizontal, Send, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getGeminiResponse } from '../services/gemini';
+import { useAuth } from '../context/AuthContext';
 import './DiscussionCard.css';
 
 const DiscussionCard = ({ user, university, time, question, tags, likes, comments }) => {
@@ -13,6 +14,8 @@ const DiscussionCard = ({ user, university, time, question, tags, likes, comment
   const [replyText, setReplyText] = useState('');
   const [replies, setReplies] = useState([]);
   const [isAiLoading, setIsAiLoading] = useState(false);
+
+  const { updateKp } = useAuth();
 
   const handleLike = () => {
     if (isLiked) {
@@ -35,6 +38,7 @@ const DiscussionCard = ({ user, university, time, question, tags, likes, comment
     }]);
     
     setCommentCount(prev => prev + 1);
+    updateKp(5); // +5 KP for replying
     setReplyText('');
     setShowReply(false);
   };

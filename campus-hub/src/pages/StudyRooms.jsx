@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, Users, Coffee, Settings } from 'lucide-react';
+import { Play, Pause, RotateCcw, Users, Coffee, Settings, X } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 import './StudyRooms.css';
 
 const activeUsers = [
@@ -15,6 +17,7 @@ const StudyRooms = () => {
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { updateKp } = useAuth();
 
   useEffect(() => {
     let interval = null;
@@ -27,10 +30,17 @@ const StudyRooms = () => {
       const nextIsBreak = !isBreak;
       setIsBreak(nextIsBreak);
       setTimeLeft((nextIsBreak ? breakTime : workTime) * 60);
-      toast(nextIsBreak ? 'Mola vakti!' : 'Çalışma vakti!', { icon: nextIsBreak ? '☕' : '🎯' });
+      
+      if (nextIsBreak) {
+        // Work session completed
+        updateKp(10);
+        toast('Mola vakti! +10 KP kazandın.', { icon: '☕' });
+      } else {
+        toast('Çalışma vakti!', { icon: '🎯' });
+      }
     }
     return () => clearInterval(interval);
-  }, [isActive, timeLeft, isBreak, workTime, breakTime]);
+  }, [isActive, timeLeft, isBreak, workTime, breakTime, updateKp]);
 
   const toggleTimer = () => setIsActive(!isActive);
 

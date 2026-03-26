@@ -26,7 +26,8 @@ export const AuthProvider = ({ children }) => {
       const newUser = {
         ...userData,
         id: Date.now().toString(),
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        kp: 0 // Başlangıç puanı
       };
 
       users.push(newUser);
@@ -47,6 +48,9 @@ export const AuthProvider = ({ children }) => {
       const foundUser = users.find(u => u.email === email && u.password === password);
 
       if (foundUser) {
+        // Migration: Add KP if it doesn't exist for old users
+        if (foundUser.kp === undefined) foundUser.kp = 0;
+        
         setUser(foundUser);
         localStorage.setItem('currentUser', JSON.stringify(foundUser));
         return { success: true };
@@ -58,13 +62,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateKp = (amount) => {
+    if (!user) return;
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const userIndex = users.findIndex(u => u.id === user.id);
+    
+    if (userIndex !== -1) {
+      const updatedUser = { ...user, kp: (user.kp || 0) + amount };
+      users[userIndex] = updatedUser;
+      
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      
+      const icon = amount > 0 ? '✨' : '📉';
+      toast(`${amount > 0 ? '+' : ''}${amount} Kampüs Puanı!`, { icon });
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('currentUser');
   };
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, register, login, logout, updateKp, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

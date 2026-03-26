@@ -9,9 +9,12 @@ const activeUsers = [
 ];
 
 const StudyRooms = () => {
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 dk
+  const [workTime, setWorkTime] = useState(25);
+  const [breakTime, setBreakTime] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(workTime * 60);
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     let interval = null;
@@ -21,16 +24,13 @@ const StudyRooms = () => {
       }, 1000);
     } else if (timeLeft === 0) {
       setIsActive(false);
-      if (!isBreak) {
-        setIsBreak(true);
-        setTimeLeft(5 * 60); // 5 dk mola
-      } else {
-        setIsBreak(false);
-        setTimeLeft(25 * 60);
-      }
+      const nextIsBreak = !isBreak;
+      setIsBreak(nextIsBreak);
+      setTimeLeft((nextIsBreak ? breakTime : workTime) * 60);
+      toast(nextIsBreak ? 'Mola vakti!' : 'Çalışma vakti!', { icon: nextIsBreak ? '☕' : '🎯' });
     }
     return () => clearInterval(interval);
-  }, [isActive, timeLeft, isBreak]);
+  }, [isActive, timeLeft, isBreak, workTime, breakTime]);
 
   const toggleTimer = () => setIsActive(!isActive);
 
@@ -43,7 +43,17 @@ const StudyRooms = () => {
   const resetTimer = () => {
     setIsActive(false);
     setIsBreak(false);
-    setTimeLeft(25 * 60);
+    setTimeLeft(workTime * 60);
+  };
+
+  const handleSaveSettings = (newWork, newBreak) => {
+    setWorkTime(newWork);
+    setBreakTime(newBreak);
+    setTimeLeft(newWork * 60);
+    setIsActive(false);
+    setIsBreak(false);
+    setIsSettingsOpen(false);
+    toast.success('Ayarlar kaydedildi!');
   };
 
   return (
@@ -54,7 +64,7 @@ const StudyRooms = () => {
             <h1>🧠 Genel Çalışma Odası</h1>
             <p>Sessizlik lütfen... Diğer 3 kişi ile birlikte çalışıyorsunuz.</p>
           </div>
-          <button className="btn btn-outline" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <button className="btn btn-outline" onClick={() => setIsSettingsOpen(true)} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <Settings size={18} /> Ayarlar
           </button>
         </header>
@@ -67,13 +77,13 @@ const StudyRooms = () => {
             </div>
             
             <div className="timer-controls">
-              <button className="btn-icon circle-btn" onClick={resetTimer}>
+              <button className="btn-icon circle-btn" onClick={resetTimer} title="Sıfırla">
                 <RotateCcw size={24} />
               </button>
-              <button className="btn-icon circle-btn play-btn" onClick={toggleTimer}>
+              <button className="btn-icon circle-btn play-btn" onClick={toggleTimer} title={isActive ? "Durdur" : "Başlat"}>
                 {isActive ? <Pause size={32} /> : <Play size={32} style={{marginLeft: '4px'}} />}
               </button>
-              <button className="btn-icon circle-btn" onClick={() => { setIsBreak(!isBreak); setTimeLeft(isBreak ? 25*60 : 5*60); setIsActive(false); }}>
+              <button className="btn-icon circle-btn" onClick={() => { const next = !isBreak; setIsBreak(next); setTimeLeft((next ? breakTime : workTime) * 60); setIsActive(false); }} title="Mola/Çalışma Geçişi">
                 <Coffee size={24} />
               </button>
             </div>
@@ -118,6 +128,40 @@ const StudyRooms = () => {
           </div>
         </div>
       </div>
+
+      {isSettingsOpen && (
+        <div className="modal-overlay animate-fade-in" style={{zIndex: 10000}}>
+          <div className="modal-content" style={{maxWidth: '400px'}}>
+            <div className="modal-header">
+              <h3>Zamanlayıcı Ayarları</h3>
+              <button className="close-btn" onClick={() => setIsSettingsOpen(false)}><X size={24} /></button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Çalışma Süresi (Dakika)</label>
+                <input 
+                  type="number" 
+                  className="form-input" 
+                  defaultValue={workTime} 
+                  onChange={(e) => setWorkTime(parseInt(e.target.value) || 25)}
+                />
+              </div>
+              <div className="form-group">
+                <label>Mola Süresi (Dakika)</label>
+                <input 
+                  type="number" 
+                  className="form-input" 
+                  defaultValue={breakTime}
+                  onChange={(e) => setBreakTime(parseInt(e.target.value) || 5)}
+                />
+              </div>
+              <button className="btn btn-primary" style={{width: '100%', marginTop: '1rem'}} onClick={() => handleSaveSettings(workTime, breakTime)}>
+                Ayarları Uygula
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

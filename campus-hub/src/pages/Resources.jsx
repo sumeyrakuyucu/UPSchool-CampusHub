@@ -7,14 +7,9 @@ import './Resources.css';
 
 const Resources = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedType, setSelectedType] = useState('All'); // 'All', 'not', 'cikmis', 'ozet'
+  const [selectedUniversity, setSelectedUniversity] = useState('All');
   const { resources } = useData();
-
-  const handleFilterChange = (e) => {
-    toast.success(`${e.target.labels?.[0]?.innerText || 'Filtre'} başarıyla uygulandı!`, {
-      icon: '✓',
-      duration: 1500
-    });
-  };
 
   const handleSearch = () => {
     if (!searchQuery.trim()) {
@@ -40,20 +35,29 @@ const Resources = () => {
             
             <div className="filter-section">
               <h4>Kategori</h4>
-              <label className="checkbox-label"><input type="checkbox" defaultChecked onChange={handleFilterChange} /> Tüm Kaynaklar</label>
-              <label className="checkbox-label"><input type="checkbox" onChange={handleFilterChange} /> Ders Notu</label>
-              <label className="checkbox-label"><input type="checkbox" onChange={handleFilterChange} /> Çıkmış Soru</label>
-              <label className="checkbox-label"><input type="checkbox" onChange={handleFilterChange} /> Sınav Özeti</label>
+              <label className="checkbox-label">
+                <input type="radio" name="type" checked={selectedType === 'All'} onChange={() => setSelectedType('All')} /> Tüm Kaynaklar
+              </label>
+              <label className="checkbox-label">
+                <input type="radio" name="type" checked={selectedType === 'not'} onChange={() => setSelectedType('not')} /> Ders Notu
+              </label>
+              <label className="checkbox-label">
+                <input type="radio" name="type" checked={selectedType === 'cikmis'} onChange={() => setSelectedType('cikmis')} /> Çıkmış Soru
+              </label>
             </div>
             
             <div className="filter-section">
               <h4>Üniversite</h4>
-              <select className="filter-select" onChange={(e) => toast(`Üniversite seçildi: ${e.target.value}`, { icon: '🏫' })}>
-                <option>Tüm Üniversiteler</option>
-                <option>İTÜ</option>
-                <option>ODTÜ</option>
-                <option>Boğaziçi Üniv.</option>
-                <option>Hacettepe Üniv.</option>
+              <select 
+                className="filter-select" 
+                value={selectedUniversity}
+                onChange={(e) => setSelectedUniversity(e.target.value)}
+              >
+                <option value="All">Tüm Üniversiteler</option>
+                <option value="İTÜ">İTÜ</option>
+                <option value="ODTÜ">ODTÜ</option>
+                <option value="Boğaziçi Üniv.">Boğaziçi Üniv.</option>
+                <option value="Hacettepe Üniv.">Hacettepe Üniv.</option>
               </select>
             </div>
           </div>
@@ -72,21 +76,19 @@ const Resources = () => {
               />
               <button className="btn btn-primary" style={{ padding: '0.4rem 1rem', borderRadius: '999px', fontSize: '0.8rem' }} onClick={handleSearch}>Ara</button>
             </div>
-            <select className="filter-select sort-select" onChange={(e) => toast(`Sıralama: ${e.target.value}`, { icon: '🔄' })}>
-              <option>En Yeniler</option>
-              <option>En Çok İndirilenler</option>
-              <option>En Yüksek Puanlılar</option>
-            </select>
           </div>
           
           <div className="resources-list">
             {(() => {
-              let filtered = resources.filter(r => 
-                r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                r.author.toLowerCase().includes(searchQuery.toLowerCase())
-              );
+              let filtered = resources.filter(r => {
+                const matchesSearch = r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                     r.author.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesType = selectedType === 'All' || r.type === selectedType;
+                const matchesUniv = selectedUniversity === 'All' || r.university === selectedUniversity;
+                
+                return matchesSearch && matchesType && matchesUniv;
+              });
               
-              // Note: Sorting by date (newest first)
               filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
               if (filtered.length === 0) {
